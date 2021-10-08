@@ -208,8 +208,7 @@ df_dismantle = pd.DataFrame()
 
 df_government_solar = pd.read_csv(r"C:\Users\IEUser\Desktop\Yasin thesi files\Input data\government\solar_gov.csv")
 df_goverment_onshore = pd.read_csv(r"C:\Users\IEUser\Desktop\Yasin thesi files\Input data\government\onshore_gov.csv")
-df_government_offshore = pd.read_csv(
-    r"C:\Users\IEUser\Desktop\Yasin thesi files\Input data\government\offshore_gov.csv")
+df_government_offshore = pd.read_csv(r"C:\Users\IEUser\Desktop\Yasin thesi files\Input data\government\offshore_gov.csv")
 
 ##############################################################################################
 #                                                                                            #
