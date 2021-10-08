@@ -375,7 +375,7 @@ for asset_groups in investment_list_dic:
 
 ##############################################################################################
 #                                                                                            #
-#                       #CODE TO INITIATE PRESENT PRICE MODEL                                #
+#                        #CODE TO RUN PRESENT PRICE PART OF THE MIDO MODEL                   #
 #                                                                                            #
 ##############################################################################################
 
