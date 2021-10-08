@@ -1,4 +1,4 @@
- ##############################################################################################
+##############################################################################################
 #                                                                                            #
 #                           #ALL PACKAGES NECESSARY FOR A RUN                                #
 #                                                                                            #
@@ -102,9 +102,6 @@ VOLL = 4000
 budget_year0 = 4e9
 dismantle_loop_stop = 0.93
 
-now = datetime.now()
-current_time = now.strftime("%H:%M:%S")
-print("The time at beginning of experiment", experiment, current_time)
 
 ##############################################################################################
 #                                                                                            #
@@ -166,7 +163,20 @@ weather_dic = {'OffshoreWind': 'Offshore', 'OnshoreWind': 'Onshore', 'SolarPV': 
 
 government_asset_list = []
 
-# update ages of all assets for dismantle loop
+# Determine ages of all assets
+solar_age_list = [20, 18, 17, 17, 16, 16, 15, 15, 15, 14, 14, 14, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 12, 12, 11,
+                  11, 11, 11, 11, 11, 11, 11, 11, 11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9, 9, 8,
+                  8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5,
+                  5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1,
+                  1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+wind_onshore_age_list = [24, 24, 21, 16, 14, 9, 6, 4, 3, 2, 1]
+wind_offshore_age_list = [23, 22, 15, 14, 10, 10, 9, 8, 7, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1]
+CCGT_age_list = [45, 40, 37, 35, 33, 31, 26, 24, 20, 20, 18, 17, 17, 8, 6, 5, 2, 2]
+
+OCGT_age_list = [42, 40, 37, 36, 35, 34, 33, 33, 32, 31, 31, 26, 26, 23, 23, 20, 20, 20, 18, 18, 18, 17, 17, 8, 5, 2]
+ElectrolyserS_age_list = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+LiOnS_age_list = [10, 10, 9, 9, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1]
+
 
 CO2_price = 35
 CO2_development = 1.062
@@ -252,6 +262,9 @@ for asset_groups in investment_list_dic:
     for individual_assets in investment_list_dic[asset_groups]:
         all_asset_age_dic[individual_assets] = 1
 
+all_asset_age_dic['Biomass1'] = 20
+all_asset_age_dic['ElectrolyserOCGT1'] = 5
+
 for assets in investment_list:
     installed_counter_list += [str(assets) + '_installed_counter']
 
@@ -305,34 +318,6 @@ def RemoveNumber(s):
     remove_digits = str.maketrans('', '', digits)
     res = s.translate(remove_digits)
     return (res)
-
-
-# Determine ages of all assets
-solar_age_list = [20, 18, 17, 17, 16, 16, 15, 15, 15, 14, 14, 14, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 12, 12, 11,
-                  11, 11, 11, 11, 11, 11, 11, 11, 11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 9, 9, 9, 9, 9, 9, 9, 9, 9, 8,
-                  8, 8, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7, 7, 7, 7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5,
-                  5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1,
-                  1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-wind_onshore_age_list = [24, 24, 21, 16, 14, 9, 6, 4, 3, 2, 1]
-wind_offshore_age_list = [23, 22, 15, 14, 10, 10, 9, 8, 7, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1]
-CCGT_age_list = [45, 40, 37, 35, 33, 31, 26, 24, 20, 20, 18, 17, 17, 8, 6, 5, 2, 2]
-# CCGT_age_list = [45, 40, 37, 35, 35, 34, 33, 33, 31, 31, 26, 26, 21, 21, 20, 20, 19, 19, 18, 18, 17, 17, 17, 9, 9, 8, 8, 6, 5, 4, 2, 2, 2]
-# CCGT_age_list = [45, 40, 37, 35, 34, 33, 31, 26, 26,24, 20, 20, 18, 18, 18, 17, 17, 8, 6, 5, 2,2]
-# CCGT_age_list = [37, 35, 34, 33, 31, 26, 26, 23, 20, 20, 18, 18, 18, 17, 8, 2]
-OCGT_age_list = [42, 40, 37, 36, 35, 34, 33, 33, 32, 31, 31, 26, 26, 23, 23, 20, 20, 20, 18, 18, 18, 17, 17, 8, 5, 2]
-# OCGT_age_list = [42, 40, 37, 37, 36, 35, 35, 34, 34, 34, 34, 34, 34, 33, 33, 33, 33, 33, 33, 32, 32, 31, 31, 31, 26, 26, 26, 26, 23, 23, 20, 20, 20, 20, 20, 20, 20, 20, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 17, 17, 17, 17, 8, 5, 2]
-# OCGT_age_list = [45, 45, 45, 44, 40, 40, 37, 37, 36, 35, 34, 34, 34, 34, 34, 34, 33, 33, 33, 33, 33, 33, 33, 33, 32, 32, 32, 31, 31, 31, 31, 31, 26, 26, 26, 26, 26, 26, 23, 23, 23, 23, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 17, 17, 17, 17, 17, 17, 17, 11, 10, 10, 10, 9, 9, 8, 8, 5, 5, 5, 5, 2, 1, 1]
-# OCGT_age_list = [45, 45, 44, 40, 37, 36, 35, 34, 34, 34, 34, 33, 33, 33, 33, 33, 33, 32, 32, 31, 31, 31, 26, 26, 26, 26, 26, 23, 23, 23, 20, 20, 20, 20, 20, 20, 20, 20, 18, 18, 18, 18, 18, 18, 18, 18, 18, 17, 17, 17, 17, 17, 11, 10, 10, 10, 9, 9, 8, 8, 5, 5, 5, 2, 1, 1]
-# LiOnS_age_list = [10, 10, 10, 10, 10, 9, 9, 9, 9, 9, 8, 8, 8, 8, 7, 7, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1]
-# ElectrolyserS_age_list = [10,10, 9,9, 8,8,7, 7,6, 6,5, 5,4, 4,4, 3,3, 2,2,1, 1]
-# LiOnS_age_list = [10, 10, 10, 10, 10, 9, 9, 9, 9, 9, 8, 8, 8, 8, 7, 7, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1]
-# ElectrolyserS_age_list = [10,10, 9,9, 8,8,7, 7,6, 6,5, 5, 4,4, 3,3, 2,2,1, 1]
-ElectrolyserS_age_list = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-LiOnS_age_list = [10, 10, 9, 9, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1]
-
-all_asset_age_dic['Biomass1'] = 20
-# all_asset_age_dic['ElectrolyserOCGT2'] = 1
-all_asset_age_dic['ElectrolyserOCGT1'] = 5
 
 for asset_groups in investment_list_dic:
     remove1 = len(asset_groups) - len('_asset_list')
@@ -391,7 +376,7 @@ for asset_groups in investment_list_dic:
 
 ##############################################################################################
 #                                                                                            #
-#                                       #UC RUN                                              #
+#                       #CODE TO INITIATE PRESENT PRICE MODEL                                #
 #                                                                                            #
 ##############################################################################################
 
@@ -401,19 +386,19 @@ while year <= end_year:
     for assets in investment_list:
         if assets == 'OffshoreWind':
             euro_mw_dic[assets] = euro_mw_dic[assets] * ((1 + offshore_development))
-        if assets == 'OnshoreWind':
+        elif assets == 'OnshoreWind':
             euro_mw_dic[assets] = euro_mw_dic[assets] * ((1 + onshore_development))
-        if assets == 'SolarPV':
+        elif assets == 'SolarPV':
             euro_mw_dic[assets] = euro_mw_dic[assets] * ((1 + solar_development))
-        if assets == 'GasCCGT':
+        elif assets == 'GasCCGT':
             euro_mw_dic[assets] = euro_mw_dic[assets] * ((1 + gas_CCGT_development))
-        if assets == 'ElectrolyserS':
+        elif assets == 'ElectrolyserS':
             euro_mw_dic[assets] = euro_mw_dic[assets] * ((1 + electrolyser_development))
-        if assets == 'ElectrolyerCCGT':
+        elif assets == 'ElectrolyerCCGT':
             euro_mw_dic[assets] = 0.945 + (euro_mw_dic[assets] - 0.945) * ((1 + electrolyser_development))
-        if assets == 'ElectrolyerOCGT':
+        elif assets == 'ElectrolyerOCGT':
             euro_mw_dic[assets] = 0.420 + (euro_mw_dic[assets] - 0.420) * ((1 + electrolyser_development))
-        if assets == 'LiOnStorage':
+        elif assets == 'LiOnStorage':
             euro_mw_dic[assets] = euro_mw_dic[assets] * ((1 + storage_development))
         else:
             euro_mw_dic[assets] = euro_mw_dic[assets]
@@ -635,46 +620,9 @@ while year <= end_year:
     hard_reset = 0
 
     while not os.path.isfile(
-            r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\sznUC2030-data.txt"):  # dit zorgt ervoor dat script wacht op Linny-R
+            r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\sznUC2030-data.txt"):  #this ensures script waits on Linny-R model
         sleep(1)
         timer += 1
-        if timer >= 240:
-            from pynput.mouse import Button, Controller
-
-            mouse = Controller()
-            mouse.position = (509, 19)
-            mouse.click(Button.left, 1)
-            sleep(5)
-            mouse.position = (1053, 162)
-            mouse.click(Button.left, 1)
-            os.chdir(r"C:\Users\IEUser\Desktop\Yasin thesi files\Linny-R")
-            subprocess.Popen("python -m flask run")
-            os.chdir(original_path)
-            sleep(5)
-            mouse.position = (614, 95)
-            mouse.click(Button.left, 1)
-            mouse.position = (863, 556)
-            mouse.click(Button.left, 1)
-
-            from pynput.keyboard import Key, Controller
-
-            keyboard = Controller()
-
-            for x in range(len(receiver_path)):
-                for y in receiver_path[x]:
-                    keyboard.press(y)
-                    keyboard.release(y)
-
-            from pynput.mouse import Button, Controller
-
-            mouse = Controller()
-
-            mouse.position = (1056, 519)
-            mouse.click(Button.left, 1)
-            hard_reset = 1
-            timer = 0
-
-    print('Szn UC - gelukt in year', year)
 
     df_storage2050_UC = pd.read_csv(
         r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\sznUC2030-data.txt",
@@ -874,48 +822,11 @@ while year <= end_year:
          r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver")
 
     timer = 0
-    hard_reset = 0
 
     while not os.path.isfile(
             r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\dailyUC2030-data.txt"):
         sleep(1)
         timer += 1
-        if timer >= 240:
-            from pynput.mouse import Button, Controller
-
-            mouse = Controller()
-            mouse.position = (509, 19)
-            mouse.click(Button.left, 1)
-            sleep(5)
-            mouse.position = (1053, 162)
-            mouse.click(Button.left, 1)
-            os.chdir(r"C:\Users\IEUser\Desktop\Yasin thesi files\Linny-R")
-            subprocess.Popen("python -m flask run")
-            os.chdir(original_path)
-            sleep(5)
-            mouse.position = (614, 95)
-            mouse.click(Button.left, 1)
-            mouse.position = (863, 556)
-            mouse.click(Button.left, 1)
-
-            from pynput.keyboard import Key, Controller
-
-            keyboard = Controller()
-
-            for x in range(len(receiver_path)):
-                for y in receiver_path[x]:
-                    keyboard.press(y)
-                    keyboard.release(y)
-
-            from pynput.mouse import Button, Controller
-
-            mouse = Controller()
-
-            mouse.position = (1056, 519)
-            mouse.click(Button.left, 1)
-            timer = 0
-
-    print('DailyUC -gelukt in year', year)
 
     # These are the storage targets at the beginning of this year for daily UC
     target_HSE = df_storage_y2_UC.loc[365, 'Hydrogen Storage - Electrolyser S|L']
@@ -1455,7 +1366,6 @@ while year <= end_year:
                                                     'Solar']), 0)
     D_residual = df_UC2050_1["Residual load"].max()
     supply_ratio = (total_capacity) / D_residual
-    print("Supplyratio=", supply_ratio)
 
     df_linny['VOLL'] = np.where(df_linny['e-price'] == VOLL,
                                 1, 0)
@@ -1551,12 +1461,11 @@ while year <= end_year:
 
     ##############################################################################################
     #                                                                                            #
-    #                                       #FP RUN                                              #
+    #                          #CODE TO RUN THE FP PART OF MIDO MODEL                            #
     #                                                                                            #
     ##############################################################################################
 
     budget = sum(df_asset_cf_UC.sum(1))
-    print("Earned this in market", budget / 1e9)
 
     # if budget > 0:
     #     budget = budget
@@ -1564,21 +1473,13 @@ while year <= end_year:
     #     budget = 0
 
     if year == 1:
-        print("Budget before year0 bonus", budget / 1e9)
         budget_number = budget + budget_year0
-        print("Budget after year0 bonus", budget_number / 1e9)
-        print("So much should be payed for debt in year 1", df_debt.loc[year].sum() / 1e9)
         budget_number = budget_number - df_debt.loc[year].sum()
-        print("Final budget", budget_number / 1e9)
     else:
         budget_number += budget
         tot_debt = sum(df_debt.sum(1))
         if tot_debt > 0:
-            print("So much should be payed for debt", df_debt.loc[year].sum() / 1e9)
             budget_number = budget_number - df_debt.loc[year].sum()
-
-    print("Budget for one energy companies", budget_number / 1e9 / energy_companies, "(min costs is",
-          (min_cost / 1e9) * equity_factor, ")")
 
     negative_npv = 0
     investment_round = 0
@@ -1697,8 +1598,6 @@ while year <= end_year:
             ((budget_number / energy_companies)) >= min_cost * equity_factor):
 
         investment_round += 1
-
-        print('budget during investment round', investment_round, '=', budget_number / 1e9 / energy_companies)
 
         # Copy all relevant dictionaries
         FP_delay_dic = cpy.deepcopy(delay_dic)
@@ -2024,49 +1923,11 @@ while year <= end_year:
                 r"C:\Users\IEUser\Desktop\Yasin thesi files\Input data\Linny-R models\sznUC2030RP.lnr",
                 r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver")
             timer = 0
-            hard_reset = 0
+
 
             while not os.path.isfile(
-                    r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\sznUC2030RP-data.txt"):  # dit zorgt ervoor dat script wacht op Linny-R
-
+                    r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\sznUC2030RP-data.txt"):  #this ensures that script waits for Linny-R model to finish
                 sleep(1)
-
-                timer += 1
-
-                if timer >= 25:
-                    from pynput.mouse import Button, Controller
-
-                    mouse = Controller()
-                    mouse.position = (509, 19)
-                    mouse.click(Button.left, 1)
-                    sleep(5)
-                    mouse.position = (1053, 162)
-                    mouse.click(Button.left, 1)
-                    os.chdir(r"C:\Users\IEUser\Desktop\Yasin thesi files\Linny-R")
-                    subprocess.Popen("python -m flask run")
-                    os.chdir(original_path)
-                    sleep(5)
-                    mouse.position = (614, 95)
-                    mouse.click(Button.left, 1)
-                    mouse.position = (863, 556)
-                    mouse.click(Button.left, 1)
-
-                    from pynput.keyboard import Key, Controller
-
-                    keyboard = Controller()
-
-                    for x in range(len(receiver_path)):
-                        for y in receiver_path[x]:
-                            keyboard.press(y)
-                            keyboard.release(y)
-
-                    from pynput.mouse import Button, Controller
-
-                    mouse = Controller()
-
-                    mouse.position = (1056, 519)
-                    mouse.click(Button.left, 1)
-                    timer = 0
 
             df_storage2050_UC = pd.read_csv(
                 r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\sznUC2030RP-data.txt",
@@ -2479,52 +2340,12 @@ while year <= end_year:
                 r"C:\Users\IEUser\Desktop\Yasin thesi files\Input data\Linny-R models\dailyUC2030RP.lnr",
                 r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver")
             timer = 0
-            hard_reset = 0
+
 
             while not os.path.isfile(
-                    r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\dailyUC2030RP-data.txt"):  # dit zorgt ervoor dat script wacht op Linny-R
+                    r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\dailyUC2030RP-data.txt"):  #this ensures script waits on Linny-R model to finish
                 sleep(1)
                 timer += 1
-
-                if timer >= 25:
-                    from pynput.mouse import Button, Controller
-
-                    mouse = Controller()
-                    mouse.position = (509, 19)
-                    mouse.click(Button.left, 1)
-                    sleep(5)
-                    mouse.position = (1053, 162)
-                    mouse.click(Button.left, 1)
-                    os.chdir(r"C:\Users\IEUser\Desktop\Yasin thesi files\Linny-R")
-                    subprocess.Popen("python -m flask run")
-                    os.chdir(original_path)
-                    sleep(5)
-                    mouse.position = (614, 95)
-                    mouse.click(Button.left, 1)
-                    mouse.position = (863, 556)
-                    mouse.click(Button.left, 1)
-
-                    from pynput.keyboard import Key, Controller
-
-                    keyboard = Controller()
-
-                    for x in range(len(receiver_path)):
-                        for y in receiver_path[x]:
-                            keyboard.press(y)
-                            keyboard.release(y)
-
-                    from pynput.mouse import Button, Controller
-
-                    mouse = Controller()
-
-                    mouse.position = (1056, 519)
-                    mouse.click(Button.left, 1)
-                    timer = 0
-
-            if hard_reset == 1:
-                while not os.path.isfile(
-                        r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\dailyUC2030RP-data.txt"):  # dit zorgt ervoor dat script wacht op Linny-R
-                    sleep(1)
 
             df_linny = pd.read_csv(
                 r"C:\Users\IEUser\Desktop\Yasin thesi files\2030 receiver\dailyUC2030RP-data.txt",
@@ -2616,9 +2437,6 @@ while year <= end_year:
                                                                                               RemoveNumber(
                                                                                                   individual_assets) + '_asset_list']
 
-            # for asset_groups in investment_list_dic_FP:
-            #     remove1 = len(asset_groups) - len('_asset_list')
-            #     print("Asset group",asset_groups[:remove1],"has so many assets",len(investment_list_dic_FP[asset_groups]))
 
             for asset_groups in investment_list_dic_FP:
                 remove1 = len(asset_groups) - len('_asset_list')
@@ -3090,13 +2908,10 @@ while year <= end_year:
             npv_dic.update(npv_dic_add)
 
         max_npv_asset = getKeysByValue(npv_dic, max(npv_dic.values()))[0]
-        print("Overview of all NPVs", npv_dic)
 
         if max(npv_dic.values()) <= 0:
-            print("This round market stops investing")
             negative_npv = 1
         else:
-            print("This round market invests in", max_npv_asset)
             budget_number = budget_number - (FP_investment_costs_dic[RemoveNumber(max_npv_asset)] * equity_factor)
             delay_value = year + asset_delay_dic[RemoveNumber(max_npv_asset)]
             delay_dic[max_npv_asset] = delay_value
@@ -3106,7 +2921,6 @@ while year <= end_year:
                 if asset_groups[:remove1] == RemoveNumber(max_npv_asset):
                     new_asset = RemoveNumber(max_npv_asset) + str(len(investment_list_dic_FP[asset_groups]) + 1)
                     pipeline_list_dic[str(RemoveNumber(max_npv_asset)) + '_in_pipeline'] += 1
-                    # all_asset_capacity_dic[max_npv_asset] = 0 #CHECK IF THIS SHOULD STAYED REMOVED?
                     all_asset_age_dic[max_npv_asset] = asset_delay_dic[RemoveNumber(max_npv_asset)]
                     assets_this_round = [max_npv_asset] + assets_this_round
 
@@ -3117,7 +2931,11 @@ while year <= end_year:
                                                                          1 - equity_factor) / \
                                                              asset_eco_lifetime_dic[RemoveNumber(individual_assets)]
 
-    # Dismantle loop
+    ##############################################################################################
+    #                                                                                            #
+    #                       #CODE TO INITIATE DISMANTLE PART OF THE MIDO MODEL                   #
+    #                                                                                            #
+    ##############################################################################################
 
     dismantle_order_dic_sorted = {}
     dismantle_age_order_dic_sorted = {}
@@ -3127,7 +2945,6 @@ while year <= end_year:
         for individual_assets in dismantle_list_dic[asset_groups]:
             if all_asset_capacity_dic[individual_assets] == 1:
                 if asset_lifetime_dic[asset_groups[:remove1]] == all_asset_age_dic[individual_assets]:
-                    print("Remove asset due to age", individual_assets)
                     all_asset_capacity_dic[individual_assets] = 0
                     asset_capacity_dic[asset_groups[:remove1]] = asset_capacity_dic[asset_groups[:remove1]] - 1
                     investment_list_dic[asset_groups].remove(individual_assets)
@@ -3214,14 +3031,11 @@ while year <= end_year:
                     total_capacity += (standard_asset * 0.39 * asset_capacity)
 
         dismantle_supply_ratio = (total_capacity) / dismantle_D_residual
-        print(dismantle_supply_ratio)
 
         if dismantle_supply_ratio > dismantle_loop_stop:
             if individual_asset in government_asset_list:
                 governmentcounter = 0
             else:
-                print("Remote asset due to costs", individual_assets)
-                print("Dismantle supply ratio", dismantle_supply_ratio)
                 all_asset_capacity_dic[individual_assets] = 0
                 asset_capacity_dic[RemoveNumber(individual_assets)] = asset_capacity_dic[
                                                                           RemoveNumber(individual_assets)] - 1
@@ -3241,17 +3055,10 @@ while year <= end_year:
         #                                                          asset_groups[:remove1]] - 1
         #        investment_list_dic[asset_groups].remove(individual_assets)
 
-    # Delay dic
-
-    print("Delay dic at end of year", year, "=", delay_dic)
-    print("Budget at end of year", year, "=", budget)
-    print("Installed assets at end of year", year, "=", asset_capacity_dic)
-
     install_asset_list = []
     install_asset_list = getKeysByValue(delay_dic, int(year))
 
     for individual_assets in install_asset_list:
-        print("This asset is installed from the delay_dic", individual_assets)
         asset_capacity_dic[RemoveNumber(individual_assets)] += 1
         all_asset_capacity_dic[individual_assets] = 1
         all_asset_age_dic[individual_assets] = 0
@@ -3267,6 +3074,8 @@ while year <= end_year:
             del delay_dic[individual_asset]
 
     subsidiy_cost = 0
+
+    #Install any government back assets if subsidies are part of the scenario
 
     government_counter_list = []
 
@@ -3310,10 +3119,5 @@ while year <= end_year:
         government_asset_list += [government_asset]
         subsidiy_cost += investment_costs_dic['OffshoreWind'] * 1
 
-    print("Subsidiycosts in year", year, "=", subsidiy_cost)
-    print("government_asset_list", government_asset_list)
-    year += 1
 
-now = datetime.now()
-current_time = now.strftime("%H:%M:%S")
-print("The time at ending of experiment", experiment, current_time)
+    year += 1
